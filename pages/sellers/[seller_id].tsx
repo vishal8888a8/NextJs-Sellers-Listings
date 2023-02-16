@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import SellerModal from "@/components/SellerModal";
+import ListingModal from "@/components/ListingModal";
+import { useRouter } from "next/router";
 import axios from "axios";
-import Link from "next/link";
 
 type Props = {};
 
 export default function home({}: Props) {
-    let [sellersData, updateSellersData] = useState([]);
+    let router = useRouter();
+    let [listingData, updateListingData] = useState([]);
     useEffect(() => {
         let api_call = async () => {
-            let res = await axios("https://jsonplaceholder.typicode.com/users");
-            updateSellersData(res.data);
+            let res = await axios("https://dummyjson.com/products?limit=20");
+            updateListingData(res.data.products);
         };
         api_call();
     }, []);
@@ -18,18 +19,17 @@ export default function home({}: Props) {
     return (
         <>
             <div className="title">
-                <h1>HOME SCREEN</h1>
+                <h1>{router.query.seller_id}</h1>
             </div>
             <div className="list_container">
                 <div className="functions">
-                    <div className="icon_search">
-                        <i className="fa fa-search icon"></i>
-                        <input type="text" name="search" id="search" />
+                    <div>
+                        <h1>Listings</h1>
                     </div>
                     <div className="add_sellers">
-                        <SellerModal
-                            sellers={sellersData}
-                            updateSellers={updateSellersData}
+                        <ListingModal
+                            listing={listingData}
+                            updateListing={updateListingData}
                         />
                     </div>
                 </div>
@@ -37,22 +37,29 @@ export default function home({}: Props) {
                     <table className="students">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Contact No.</th>
-                                <th>Total Listings</th>
+                                <th>Product</th>
+                                <th>Stock</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {sellersData.map((item) => (
+                            {listingData.map((item) => (
                                 <tr>
                                     <td>
-                                        <Link href={"/sellers/" + item.name}>
-                                            {item.name}
-                                        </Link>
+                                        <img
+                                            src={item.thumbnail}
+                                            style={{
+                                                height: "2.5rem",
+                                                width: "2.5rem",
+                                                marginRight: "1rem",
+                                                borderRadius: "0.3rem",
+                                            }}
+                                        />
+                                        {item.title}
                                     </td>
-                                    <td>{item.phone}</td>
-                                    <td>26</td>
+                                    <td>{item.stock}</td>
+                                    <td>{item.price}</td>
                                     <td>
                                         <div className="buttons">
                                             <button className="update">

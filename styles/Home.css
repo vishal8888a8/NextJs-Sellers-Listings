@@ -1,0 +1,124 @@
+@import url("../node_modules/font-awesome/css/font-awesome.min.css");
+
+.title {
+    text-align: center;
+    margin: 2rem auto;
+    color: #3d1766;
+}
+
+.functions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list_container {
+    width: 75vw;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.students {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.students td,
+.students th {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    padding: 1rem;
+}
+
+.students td {
+    padding: 0.5rem;
+}
+
+.students th {
+    background-color: #3d1766;
+    color: #ddd;
+    border: none;
+}
+
+.students tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.students tbody tr:hover {
+    background-color: #ddd;
+}
+
+.table_list {
+    height: 21rem;
+    border: solid 0.15rem #3d1766;
+    border-top: none;
+    overflow-x: scroll;
+}
+
+.table_list::-webkit-scrollbar {
+    display: none;
+}
+
+#fullName:hover {
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.delete {
+    border: none;
+    padding: 5%;
+    color: white;
+    background-color: #cd0404;
+    border-radius: 0.2rem;
+}
+
+.delete:hover {
+    cursor: pointer;
+    background-color: black;
+}
+
+.update {
+    border: none;
+    padding: 5%;
+    color: white;
+    background-color: green;
+    border-radius: 0.2rem;
+}
+
+.update:hover {
+    cursor: pointer;
+    background-color: black;
+}
+
+#search {
+    border-radius: 2rem;
+    border: solid 0.15rem #3d1766;
+    padding: 0.6rem;
+    padding-left: 2rem;
+    width: 100%;
+}
+
+#search:focus,
+input:focus {
+    outline: none;
+}
+
+/* icon */
+.icon_search {
+    width: 50%;
+}
+
+.icon_search i {
+    position: absolute;
+}
+
+.icon {
+    padding: 0.7rem;
+    min-width: 2.5rem;
+}
