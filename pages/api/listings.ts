@@ -1,5 +1,7 @@
 import Listings from "@/data/localListings";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "@/database/db";
+connectDB();
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     try {

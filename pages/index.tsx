@@ -4,14 +4,33 @@ import axios from "axios";
 import Link from "next/link";
 
 type Props = {};
-
+type sellerInterface = {
+    _id: string;
+    name: string;
+    contact: string;
+    location: string;
+    address: string;
+    gender: string;
+    image: string;
+    listings: number;
+};
 export default function home({}: Props) {
-    let [sellersData, updateSellersData] = useState([]);
+    let [sellersData, updateSellersData] = useState<Array<sellerInterface>>([]);
+    let api_call = async () => {
+        let res = await axios("http://localhost:3000/api/sellers");
+        updateSellersData(res.data);
+    };
+    let deleteHandler = async (item: sellerInterface) => {
+        {
+            let res = await axios.delete("http://localhost:3000/api/sellers", {
+                data: {
+                    _id: item._id,
+                },
+            });
+            await api_call();
+        }
+    };
     useEffect(() => {
-        let api_call = async () => {
-            let res = await axios("https://jsonplaceholder.typicode.com/users");
-            updateSellersData(res.data);
-        };
         api_call();
     }, []);
 
@@ -27,10 +46,7 @@ export default function home({}: Props) {
                         <input type="text" name="search" id="search" />
                     </div>
                     <div className="add_sellers">
-                        <SellerModal
-                            sellers={sellersData}
-                            updateSellers={updateSellersData}
-                        />
+                        <SellerModal api_call={api_call} />
                     </div>
                 </div>
                 <div className="table_list">
@@ -51,14 +67,17 @@ export default function home({}: Props) {
                                             {item.name}
                                         </Link>
                                     </td>
-                                    <td>{item.phone}</td>
-                                    <td>26</td>
+                                    <td>{item.contact}</td>
+                                    <td>{item.listings}</td>
                                     <td>
                                         <div className="buttons">
                                             <button className="update">
                                                 Update
                                             </button>
-                                            <button className="delete">
+                                            <button
+                                                className="delete"
+                                                onClick={() => deleteHandler(item)}
+                                            >
                                                 Delete
                                             </button>
                                         </div>

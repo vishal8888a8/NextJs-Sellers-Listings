@@ -7,15 +7,20 @@ import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import axios from "axios";
 
-type Props = {};
+let initial_state = {
+    name: "",
+    contact: "",
+    location: "",
+    address: "",
+    gender: "",
+    image: "",
+};
 
-export default function SellerModal({ sellers, updateSellers }: Props) {
+export default function SellerModal({ api_call }) {
     const [open, setOpen] = React.useState(false);
-    let [newSeller, updateNewSeller] = React.useState({
-        name: "",
-        phone: "",
-    });
+    let [newSeller, updateNewSeller] = React.useState(initial_state);
     return (
         <React.Fragment>
             <Button
@@ -36,10 +41,22 @@ export default function SellerModal({ sellers, updateSellers }: Props) {
                         Add sellers details
                     </Typography>
                     <form
-                        onSubmit={(event) => {
+                        onSubmit={async (event) => {
                             event.preventDefault();
-                            updateSellers((prev) => [...prev, newSeller]);
+                            let post_api_call = async () => {
+                                return await axios.post(
+                                    "http://localhost:3000/api/sellers",
+                                    newSeller
+                                );
+                            };
+                            let res = await post_api_call();
+                            // if (res.status !== 200)
+                            //     alert("Error in field values, Please check!");
+                            // else {
+                            await api_call();
+                            updateNewSeller(initial_state);
                             setOpen(false);
+                            // }
                         }}
                     >
                         <Stack spacing={2}>
@@ -65,7 +82,7 @@ export default function SellerModal({ sellers, updateSellers }: Props) {
                                         updateNewSeller((prev) => {
                                             return {
                                                 ...prev,
-                                                phone: e.target.value,
+                                                contact: e.target.value,
                                             };
                                         })
                                     }
@@ -74,19 +91,59 @@ export default function SellerModal({ sellers, updateSellers }: Props) {
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Location</FormLabel>
-                                <Input required />
+                                <Input
+                                    onChange={(e) =>
+                                        updateNewSeller((prev) => {
+                                            return {
+                                                ...prev,
+                                                location: e.target.value,
+                                            };
+                                        })
+                                    }
+                                    required
+                                />
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Address</FormLabel>
-                                <Input required />
+                                <Input
+                                    onChange={(e) =>
+                                        updateNewSeller((prev) => {
+                                            return {
+                                                ...prev,
+                                                address: e.target.value,
+                                            };
+                                        })
+                                    }
+                                    required
+                                />
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Gender</FormLabel>
-                                <Input required />
+                                <Input
+                                    onChange={(e) =>
+                                        updateNewSeller((prev) => {
+                                            return {
+                                                ...prev,
+                                                gender: e.target.value,
+                                            };
+                                        })
+                                    }
+                                    required
+                                />
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Image link</FormLabel>
-                                <Input required />
+                                <Input
+                                    onChange={(e) =>
+                                        updateNewSeller((prev) => {
+                                            return {
+                                                ...prev,
+                                                image: e.target.value,
+                                            };
+                                        })
+                                    }
+                                    required
+                                />
                             </FormControl>
                             <Button
                                 type="submit"

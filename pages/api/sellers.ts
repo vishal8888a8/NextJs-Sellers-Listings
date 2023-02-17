@@ -1,13 +1,21 @@
 import sellersList from "@/data/localSellers";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "@/database/db";
+connectDB();
+import SellersList from "@/database/sellerSchema";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse
+) {
     try {
         if (req.method === "GET") {
-            res.status(200).send(sellersList);
+            const data = await SellersList.find();
+            res.status(200).send(data);
         } else if (req.method === "POST") {
-            sellersList.push(req.body);
-            res.status(200).send(sellersList);
+            const data = new SellersList(req.body);
+            let response = await data.save();
+            res.status(200).send(response);
         } else if (req.method === "PUT") {
             let index = sellersList.findIndex(
                 (item) => item.id === req.body.id
@@ -16,12 +24,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             sellersList[index] = req.body;
             res.send(sellersList);
         } else if (req.method === "DELETE") {
-            let index = sellersList.findIndex(
-                (item) => item.id === req.body.id
-            );
-            if (index === -1) throw new Error("Seller's ID not found");
-            sellersList.splice(index, 1);
-            res.send(sellersList);
+            let _id = req.body._id;
+            await SellersList.deleteOne({ _id });
+            res.status(200).send(SellersList);
         }
     } catch (err) {
         res.status(400).send((err as Error).message);
