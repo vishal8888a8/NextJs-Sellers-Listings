@@ -16,10 +16,13 @@ type sellerInterface = {
 };
 export default function home({}: Props) {
     let [sellersData, updateSellersData] = useState<Array<sellerInterface>>([]);
+    let [searchInput, updateSearchInput] = useState<string>("");
+
     let api_call = async () => {
         let res = await axios("http://localhost:3000/api/sellers");
         updateSellersData(res.data);
     };
+
     let deleteHandler = async (item: sellerInterface) => {
         {
             let res = await axios.delete("http://localhost:3000/api/sellers", {
@@ -30,6 +33,7 @@ export default function home({}: Props) {
             await api_call();
         }
     };
+
     useEffect(() => {
         api_call();
     }, []);
@@ -43,7 +47,12 @@ export default function home({}: Props) {
                 <div className="functions">
                     <div className="icon_search">
                         <i className="fa fa-search icon"></i>
-                        <input type="text" name="search" id="search" />
+                        <input
+                            type="text"
+                            name="search"
+                            id="search"
+                            onChange={(e) => updateSearchInput(e.target.value)}
+                        />
                     </div>
                     <div className="add_sellers">
                         <SellerModal api_call={api_call} />
@@ -60,30 +69,43 @@ export default function home({}: Props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {sellersData.map((item) => (
-                                <tr>
-                                    <td>
-                                        <Link href={"/sellers/" + item.name}>
-                                            {item.name}
-                                        </Link>
-                                    </td>
-                                    <td>{item.contact}</td>
-                                    <td>{item.listings}</td>
-                                    <td>
-                                        <div className="buttons">
-                                            <button className="update">
-                                                Update
-                                            </button>
-                                            <button
-                                                className="delete"
-                                                onClick={() => deleteHandler(item)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                            {sellersData.map(
+                                (item) =>
+                                    item.name
+                                        .toLowerCase()
+                                        .includes(
+                                            searchInput.toLowerCase()
+                                        ) && (
+                                        <tr>
+                                            <td>
+                                                <Link
+                                                    href={
+                                                        "/sellers/" + item.name
+                                                    }
+                                                >
+                                                    {item.name}
+                                                </Link>
+                                            </td>
+                                            <td>{item.contact}</td>
+                                            <td>{item.listings}</td>
+                                            <td>
+                                                <div className="buttons">
+                                                    <button className="update">
+                                                        Update
+                                                    </button>
+                                                    <button
+                                                        className="delete"
+                                                        onClick={() =>
+                                                            deleteHandler(item)
+                                                        }
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                            )}
                         </tbody>
                     </table>
                 </div>
