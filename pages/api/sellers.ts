@@ -26,9 +26,10 @@ export default async function handler(
         } else if (req.method === "DELETE") {
             let _id = req.body._id;
             await SellersList.deleteOne({ _id });
-            res.status(200).send(SellersList);
+            res.status(200).send("Data Deleted!");
         }
     } catch (err) {
+        console.log(err);
         res.status(400).send((err as Error).message);
     }
 }
