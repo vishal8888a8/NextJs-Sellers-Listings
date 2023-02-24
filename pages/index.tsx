@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import SellerModal from "@/components/SellerModal";
+// import SellerModal from "@/components/SellerModal";
+import SellerModal from "../components/SellerModal";
 import axios from "axios";
 import Link from "next/link";
 
@@ -14,11 +15,11 @@ type sellerInterface = {
     image: string;
     listings: number;
 };
-export default function home({}: Props) {
+export default function Home({}: Props) {
     let [sellersData, updateSellersData] = useState<Array<sellerInterface>>([]);
     let [searchInput, updateSearchInput] = useState<string>("");
 
-    let api_call = async () => {
+    var api_call = async () => {
         let res = await axios("http://localhost:3000/api/sellers");
         updateSellersData(res.data);
     };
@@ -40,7 +41,7 @@ export default function home({}: Props) {
 
     return (
         <>
-            <div className="title">
+            <div className="Home">
                 <h1>HOME SCREEN</h1>
             </div>
             <div className="list_container">
@@ -55,7 +56,16 @@ export default function home({}: Props) {
                         />
                     </div>
                     <div className="add_sellers">
-                        <SellerModal api_call={api_call} />
+                        <SellerModal
+                            api_call={api_call}
+                            method="POST"
+                            type="Add Sellers"
+                            buttonStyle={{
+                                backgroundColor: "#3d1766",
+                                color: "white",
+                            }}
+                            id="0"
+                        />
                     </div>
                 </div>
                 <div className="table_list">
@@ -70,17 +80,17 @@ export default function home({}: Props) {
                         </thead>
                         <tbody>
                             {sellersData.map(
-                                (item) =>
+                                (item, idx) =>
                                     item.name
                                         .toLowerCase()
                                         .includes(
                                             searchInput.toLowerCase()
                                         ) && (
-                                        <tr>
+                                        <tr key={idx}>
                                             <td>
                                                 <Link
                                                     href={
-                                                        "/sellers/" + item.name
+                                                        "/sellers/" + item._id
                                                     }
                                                 >
                                                     {item.name}
@@ -90,9 +100,19 @@ export default function home({}: Props) {
                                             <td>{item.listings}</td>
                                             <td>
                                                 <div className="buttons">
-                                                    <button className="update">
-                                                        Update
-                                                    </button>
+                                                    <SellerModal
+                                                        api_call={api_call}
+                                                        method="PUT"
+                                                        type="Update"
+                                                        buttonStyle={{
+                                                            backgroundColor:
+                                                                "green",
+                                                            color: "white",
+                                                            borderRadius:
+                                                                "0.2rem",
+                                                        }}
+                                                        id={item._id}
+                                                    />
                                                     <button
                                                         className="delete"
                                                         onClick={() =>
@@ -113,3 +133,4 @@ export default function home({}: Props) {
         </>
     );
 }
+

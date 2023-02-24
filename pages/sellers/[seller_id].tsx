@@ -2,24 +2,75 @@ import React, { useEffect, useState } from "react";
 import ListingModal from "@/components/ListingModal";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Image from "next/image";
 
 type Props = {};
-
-export default function home({}: Props) {
+// type ProductType = {
+//     _id: string;
+//     name: string;
+//     sku: string;
+//     stock: number;
+//     costPrice: number;
+//     sellPrice: number;
+//     image: string;
+// };
+type ProductInterface = {
+    title: string;
+    stock: string;
+    price: string;
+    thumbnail: string;
+};
+let init_stat = {
+    _id: "",
+    name: "",
+    contact: "",
+    location: "",
+    address: "",
+    gender: "",
+    image: "",
+    listings: 0,
+    __v: 0,
+};
+export default function Home({}: Props) {
     let router = useRouter();
-    let [listingData, updateListingData] = useState([]);
+
+    let [listingData, updateListingData] = useState<Array<ProductInterface>>(
+        []
+    );
+    let [seller, updateSeller] = useState(init_stat);
+
     useEffect(() => {
+        if (!router.isReady) return;
+
+        const fetch_seller_data = async () => {
+            let res = await axios(
+                "http://localhost:3000/api/sellers?id=" + router.query.seller_id
+            );
+            updateSeller(res.data);
+        };
         let api_call = async () => {
             let res = await axios("https://dummyjson.com/products?limit=20");
             updateListingData(res.data.products);
         };
+        fetch_seller_data();
         api_call();
-    }, []);
+    }, [router.isReady]);
 
     return (
         <>
-            <div className="title">
-                <h1>{router.query.seller_id}</h1>
+            <div className="sellerDetails">
+                <div className="sellerImage">
+                    <img src={seller.image} alt="seller image" />
+                </div>
+                <div className="title">
+                    <h1>{seller.name}</h1>
+                </div>
+                <div className="address">
+                    <h4>Address :</h4>
+                    <hr />
+                    <h3>{seller.address}</h3>
+                    <h3>{seller.location}</h3>
+                </div>
             </div>
             <div className="list_container">
                 <div className="functions">
@@ -44,10 +95,11 @@ export default function home({}: Props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {listingData.map((item) => (
-                                <tr>
+                            {listingData.map((item, idx) => (
+                                <tr key={idx}>
                                     <td>
                                         <img
+                                            alt="Product Image"
                                             src={item.thumbnail}
                                             style={{
                                                 height: "2.5rem",
@@ -78,4 +130,11 @@ export default function home({}: Props) {
             </div>
         </>
     );
+}
+
+export async function getServerSideProps() {
+    let listingData = await axios("https://dummyjson.com/products?limit=20");
+    return {
+        props: {},
+    };
 }

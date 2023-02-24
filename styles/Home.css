@@ -1,14 +1,14 @@
 @import url("../node_modules/font-awesome/css/font-awesome.min.css");
 
-.title {
-    text-align: center;
-    margin: 2rem auto;
-    color: #3d1766;
-}
-
 .functions {
     display: flex;
     justify-content: space-between;
+}
+
+.Home {
+    text-align: center;
+    margin: 2rem auto;
+    color: #3d1766;
 }
 
 .list_container {
@@ -121,4 +121,32 @@ input:focus {
 .icon {
     padding: 0.7rem;
     min-width: 2.5rem;
+}
+
+/* seller header page*/
+
+.sellerDetails {
+    display: flex;
+    width: 75vw;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    color: #3d1766;
+}
+
+.sellerImage > img {
+    height: 7rem;
+    width: 7rem;
+    border-radius: 0.2rem;
+}
+
+.title {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.address {
+    font-size: 1.2rem;
 }

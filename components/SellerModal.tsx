@@ -8,6 +8,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import axios from "axios";
+import { type } from "os";
 
 let initial_state = {
     name: "",
@@ -18,7 +19,21 @@ let initial_state = {
     image: "",
 };
 
-export default function SellerModal({ api_call }) {
+type Props = {
+    api_call: () => void;
+    method: string;
+    type: string;
+    buttonStyle: object;
+    id: string;
+};
+
+export default function SellerModal({
+    api_call,
+    method,
+    type,
+    buttonStyle,
+    id,
+}: Props) {
     const [open, setOpen] = React.useState(false);
     let [newSeller, updateNewSeller] = React.useState(initial_state);
     return (
@@ -27,9 +42,9 @@ export default function SellerModal({ api_call }) {
                 variant="solid"
                 color="primary"
                 onClick={() => setOpen(true)}
-                style={{ backgroundColor: "#3d1766", color: "white" }}
+                style={buttonStyle}
             >
-                Add Sellers
+                {type}
             </Button>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <ModalDialog
@@ -38,7 +53,7 @@ export default function SellerModal({ api_call }) {
                     sx={{ maxWidth: 500 }}
                 >
                     <Typography id="basic-modal-dialog-title" component="h2">
-                        Add sellers details
+                        Sellers details
                     </Typography>
                     <form
                         onSubmit={async (event) => {
@@ -49,14 +64,21 @@ export default function SellerModal({ api_call }) {
                                     newSeller
                                 );
                             };
-                            let res = await post_api_call();
-                            // if (res.status !== 200)
-                            //     alert("Error in field values, Please check!");
-                            // else {
+
+                            let put_api_call = async () => {
+                                return await axios.put(
+                                    "http://localhost:3000/api/sellers?id=" +
+                                        id,
+                                    newSeller
+                                );
+                            };
+
+                            if (method === "POST") await post_api_call();
+                            else await put_api_call();
+                            
                             await api_call();
                             updateNewSeller(initial_state);
                             setOpen(false);
-                            // }
                         }}
                     >
                         <Stack spacing={2}>

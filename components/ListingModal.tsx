@@ -8,7 +8,15 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-type Props = {};
+type Props = {
+    listing: Array<ProductInterface>;
+    updateListing: any;
+};
+type ProductInterface = {
+    title: string;
+    stock: string;
+    price: string;
+};
 
 export default function ListingModal({ listing, updateListing }: Props) {
     const [open, setOpen] = React.useState(false);
@@ -40,7 +48,7 @@ export default function ListingModal({ listing, updateListing }: Props) {
                     <form
                         onSubmit={(event) => {
                             event.preventDefault();
-                            updateListing((prev) => [...prev, product]);
+                            updateListing((prev: any) => [...prev, product]);
                             setOpen(false);
                         }}
                     >

@@ -33,7 +33,6 @@ let sellerSchema = new mongoose.Schema({
 });
 
 let SellersList =
-    mongoose.models.SellersCol ||
-    new mongoose.model("SellersCol", sellerSchema);
+    mongoose.models.SellersCol || mongoose.model("SellersCol", sellerSchema);
 
 export default SellersList;
