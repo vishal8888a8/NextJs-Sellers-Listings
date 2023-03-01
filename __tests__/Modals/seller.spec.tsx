@@ -1,4 +1,4 @@
-import SellerModal from "../../components/SellerModal";
+import SellerModal from "../../components/Modals/SellerModal";
 // import SellerModal from "@/components/SellerModal";
 import { render, screen } from "@testing-library/react";
 

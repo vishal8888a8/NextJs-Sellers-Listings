@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "@/database/db";
+// import connectDB from "@/database/db";
+import connectDB from "../../database/db";
 connectDB();
-import SellersList from "@/database/sellerSchema";
+// import SellersList from "@/database/sellerSchema";
+import SellersList from "../../database/sellerSchema";
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+export default async function app(req: NextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "GET") {
             if (req.query.id === undefined) {
@@ -36,3 +35,5 @@ export default async function handler(
         res.status(400).send((err as Error).message);
     }
 }
+
+module.exports = app;

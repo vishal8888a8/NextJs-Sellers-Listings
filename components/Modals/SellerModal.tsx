@@ -8,7 +8,6 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import axios from "axios";
-import { type } from "os";
 
 let initial_state = {
     name: "",

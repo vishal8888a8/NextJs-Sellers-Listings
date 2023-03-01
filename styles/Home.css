@@ -3,6 +3,9 @@
 .functions {
     display: flex;
     justify-content: space-between;
+    width: 75vw;
+    margin: auto;
+    margin-bottom: 1rem;
 }
 
 .Home {

@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose")
 require("dotenv").config();
 let DB_URL: string = process.env.MONGO_URI!;
 
@@ -7,7 +8,8 @@ const connectDB = async () => {
         console.log("db connected already!");
     } else {
         mongoose.set("strictQuery", true);
-        mongoose.connect(DB_URL, () => console.log("DB is connected"));
+        await mongoose.connect(DB_URL, () => {});
+        //console.log("DB is connected")
     }
 };
 
